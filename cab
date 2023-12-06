@@ -1,0 +1,223 @@
+import java.util.*;
+
+class Mini {
+    static String available[][] = { { "006", "Swift", "Mahesh" }, { "004", "Alto", "Babu" },
+            { "008", "Nano", "Jamuna" }, { "010", "i10", "Alia" }, { "011", "City", "Mohesh" } };
+    static boolean booked[] = { true, true, true, true, true };
+    static float price = 7, round = 5;
+    static int ind = 0;
+
+    public static float cp(float kms, int trip) {
+        float p = price;
+        if (trip == 2) {
+            p = round * 2;
+        }
+        return (float) p * kms;
+
+    }
+
+    public String[] book() {
+        ind += 1;
+        return this.available[ind - 1];
+
+    }
+}
+
+class XUV {
+    static String available[][] = { { "001", "Bolero", "Vasanth" }, { "003", "XUV", "Navi" }, { "008", "SUV", "Jana" },
+            { "012", "WagonR", "Kodeesh" }, { "014", "Ertiga", "Gobu" } };
+    static boolean booked[] = { true, true, true, true, true };
+    static float price = 9, round = 7;
+    static int ind = 0;
+
+    public static float cp(float kms, int trip) {
+        float p = price;
+        if (trip == 2) {
+            p = round * 2;
+        }
+        return (float) p * kms;
+
+    }
+
+    public String[] book() {
+        ind += 1;
+        return this.available[ind - 1];
+
+    }
+}
+
+class SE {
+    static String available[][] = { { "999", "Rolce royce", "Vijay" }, { "988", "POLO", "Ajith" },
+            { "977", "Range Rover", "Ram" }, { "966", "AUDI", "Bhallaiah" }, { "955", "KIA", "Rahul Raj" } };
+    static boolean booked[] = { true, true, true, true, true };
+    static float price = 12, round = 9;
+    static int ind = 0;
+
+    public static float cp(float kms, int trip) {
+        float p = price;
+        if (trip == 2) {
+            p = round * 2;
+        }
+        return (float) p * kms;
+
+    }
+
+    public String[] book() {
+        ind += 1;
+        return this.available[ind - 1];
+
+    }
+}
+
+class Car {
+    static Mini mini = new Mini();
+    static XUV xuv = new XUV();
+    static SE se = new SE();
+    static int op = -1;
+    static int ride = -1;
+    static String pick, drop;
+    static float kms = 0;
+    static Scanner sc = new Scanner(System.in);
+
+    public static void location() {
+        Scanner sc = new Scanner(System.in);
+        op = sc.nextInt();
+        System.out.print("choose type :\n\t1.Pickup and Drop only \n\t2.Round Trip\nChoose : ");
+        ride = sc.nextInt();
+        sc.nextLine();
+        location1();
+    }
+
+    public static void location1() {
+        System.out.print("Pickup : ");
+        pick = sc.nextLine();
+        System.out.print("Drop : ");
+        drop = sc.nextLine();
+        System.out.print("Total Distance : ");
+        kms = sc.nextFloat();
+        System.out.println("");
+        calculate();
+    }
+
+    public static void calculate() {
+        float p = 0;
+        String det[] = new String[3];
+        if (op == 1) {
+            p = mini.cp(kms, ride);
+            det = mini.book();
+        } else if (op == 2) {
+            p = xuv.cp(kms, ride);
+            det = xuv.book();
+        } else if (op == 3) {
+            p = se.cp(kms, ride);
+            det = se.book();
+        }
+        System.out.println("<======================= fare Details =====================>\n\n");
+        System.out.println("Total Cost : " + p);
+        System.out.println(
+                "\n\nCar Details : \n\tModel : " + det[1] + "\n\tNumber : " + det[0] + "\n\tDriver : " + det[2]);
+        System.out.println("\n\n<======================= fare Details =====================>\n");
+    }
+}
+
+class users {
+    static String a[][] = new String[100][2];
+    static int ucount = 0;
+
+    public static boolean adduser(String s, String p) {
+        for (int i = 0; i < ucount; i++) {
+            if (a[i][0].equals(s)) {
+                return false;
+            }
+        }
+        a[ucount][0] = s;
+        a[ucount][1] = p;
+        ucount += 1;
+        return true;
+    }
+
+    public static boolean authuser(String s, String p) {
+        for (int i = 0; i < ucount; i++) {
+            if (a[i][0].equals(s)) {
+                if (a[i][1].equals(p)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+}
+
+class Home {
+    static Car c = new Car();
+
+    Home(String uname) {
+        System.out.println("\n\nWelcome to Koodesh Travel Agency\n\n\tHello, " + uname);
+        this.mainmenu();
+    }
+
+    public static void mainmenu() {
+        String type, pickup, drop;
+        int t = -1;
+        while (true) {
+            System.out.print("\n\n\nchoose type :\n\t1.Mini\n\t2.XUV\n\t3.LUXURY\nChoose : ");
+            c.location();
+            Scanner sc = new Scanner(System.in);
+            System.out.print("Do You Want to continue : (y/n)");
+            char c = sc.next().charAt(0);
+            if (c == 'y' || c == 'Y') {
+                continue;
+            } else {
+                System.out.print("Thank You for Booking .....\nLogging You out....");
+                break;
+            }
+        }
+    }
+}
+
+class auth {
+    static users pers = new users();
+    static Scanner sc = new Scanner(System.in);
+
+    public static void login() {
+        System.out.print("Username : ");
+        String uname = sc.next();
+        System.out.print("Password : ");
+        String pass = sc.next();
+        if (pers.authuser(uname, pass)) {
+            System.out.println("\n\nLogin Success....");
+            Home h = new Home(uname);
+        } else {
+            System.out.println("\n\nLogin Failed....");
+        }
+    }
+
+    public static void register() {
+        System.out.print("Username : ");
+        String uname = sc.next();
+        System.out.print("Password : ");
+        String pass = sc.next();
+        if (pers.adduser(uname, pass)) {
+            System.out.println("\n\nRegistration Success....");
+        } else {
+            System.out.println("\n\nRegistration Failed....");
+        }
+    }
+}
+
+public class Main {
+
+    public static void main(String args[]) {
+        Scanner sc = new Scanner(System.in);
+        auth verify = new auth();
+        while (true) {
+            System.out.print("Menu :\n\t1.Login\n\t2.Register\nChoose : ");
+            int n = sc.nextInt();
+            if (n == 2) {
+                auth.register();
+            } else if (n == 1) {
+                auth.login();
+            }
+        }
+    }
+}
